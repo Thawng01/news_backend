@@ -4,7 +4,7 @@ const NewsApi = require("newsapi");
 
 const newsApi = new NewsApi(process.env.news_api_key);
 
-router.get("/popular", async (req, res) => {
+router.get("/popular", async (req, res, next) => {
     try {
         const result = await newsApi.v2.everything({
             q: "bitcoin",
@@ -12,13 +12,13 @@ router.get("/popular", async (req, res) => {
             pageSize: 8,
         });
 
-        res.send(result);
+        res.status(200).send(result);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
-router.get("/recent/:id", async (req, res) => {
+router.get("/recent/:id", async (req, res, next) => {
     try {
         let hr = new Date(Date.now() - 3600 * 1000).toISOString();
         let now = new Date().toISOString();
@@ -32,45 +32,45 @@ router.get("/recent/:id", async (req, res) => {
             page: req.params.id,
         });
 
-        res.send(response);
+        res.status(200).send(response);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
-router.get("/country/:name", async (req, res) => {
+router.get("/country/:name", async (req, res, next) => {
     try {
         const response = await newsApi.v2.topHeadlines({
             country: req.params.name,
         });
 
-        res.send(response);
+        res.status(200).send(response);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
-router.get("/category/:name", async (req, res) => {
+router.get("/category/:name", async (req, res, next) => {
     try {
         const response = await newsApi.v2.topHeadlines({
             category: req.params.name,
         });
 
-        res.send(response);
+        res.status(200).send(response);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
-router.get("/search/:name", async (req, res) => {
+router.get("/search/:name", async (req, res, next) => {
     try {
         const response = await newsApi.v2.everything({
             q: req.params.name,
         });
 
-        res.send(response);
+        res.status(200).send(response);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
